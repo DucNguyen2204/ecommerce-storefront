@@ -1,0 +1,32 @@
+<p-menubar [model]="navItems()" styleClass="rounded-none border-x-0 border-t-0 px-6 w-full">
+  <ng-template #start>
+    <a routerLink="/" class="font-bold text-xl">MyStore</a>
+  </ng-template>
+
+  <ng-template #end>
+    <div class="flex items-center gap-2 pr-2">
+      @if (auth.isAuthenticated()) {
+        <a routerLink="/cart">
+          <p-button icon="pi pi-shopping-cart" [rounded]="true" [text]="true"
+            [badge]="cartCount() > 0 ? cartCount().toString() : ''"
+            badgeSeverity="danger"
+          />
+        </a>
+        <a routerLink="/orders">
+          <p-button icon="pi pi-box" [rounded]="true" [text]="true" />
+        </a>
+        <span class="text-sm text-gray-600 hidden md:inline">
+          {{ auth.currentUser()?.firstName }}
+        </span>
+        <p-button label="Sign Out" severity="secondary" size="small" (onClick)="logout()" />
+      } @else {
+        <a routerLink="/auth/login">
+          <p-button label="Sign In" severity="contrast" size="small" />
+        </a>
+        <a routerLink="/auth/register">
+          <p-button label="Register" size="small" />
+        </a>
+      }
+    </div>
+  </ng-template>
+</p-menubar>

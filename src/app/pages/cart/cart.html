@@ -1,0 +1,62 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold mb-8">Your Cart</h1>
+
+  @if (loading()) {
+    <p-skeleton height="200px" />
+  } @else if (!cartService.cart() || cartService.cart()!.items.length === 0) {
+    <div class="text-center py-20 text-gray-500">
+      <i class="pi pi-shopping-cart text-5xl mb-4 block"></i>
+      <p class="text-lg mb-6">Your cart is empty.</p>
+      <a routerLink="/shop"><p-button label="Continue Shopping" severity="secondary" outlined /></a>
+    </div>
+  } @else {
+    <div class="flex flex-col lg:flex-row gap-8">
+      <div class="flex-1">
+        <p-table [value]="cartService.cart()!.items" [tableStyle]="{'min-width': '40rem'}">
+          <ng-template #header>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Subtotal</th>
+              <th></th>
+            </tr>
+          </ng-template>
+          <ng-template #body let-item>
+            <tr>
+              <td>
+                <a [routerLink]="['/shop', item.product.id]" class="font-medium hover:text-violet-600">
+                  {{ item.product.name }}
+                </a>
+              </td>
+              <td>\${{ item.unitPrice | number:'1.2-2' }}</td>
+              <td>
+                <p-inputnumber
+                  [ngModel]="item.quantity"
+                  (ngModelChange)="updateQuantity(item, $event)"
+                  [min]="1"
+                  [showButtons]="true"
+                  inputStyleClass="w-16"
+                />
+              </td>
+              <td class="font-semibold">\${{ item.subtotal | number:'1.2-2' }}</td>
+              <td>
+                <p-button icon="pi pi-trash" severity="danger" [text]="true" (onClick)="remove(item)" />
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+
+      <div class="w-full lg:w-72 border rounded-lg p-6 h-fit flex flex-col gap-4">
+        <h2 class="text-xl font-bold">Order Summary</h2>
+        <div class="flex justify-between text-lg font-semibold border-t pt-4">
+          <span>Total</span>
+          <span>\${{ cartService.cart()!.totalAmount | number:'1.2-2' }}</span>
+        </div>
+        <p-button label="Proceed to Checkout" icon="pi pi-arrow-right" iconPos="right" (onClick)="checkout()" styleClass="w-full" />
+        <a routerLink="/shop" class="text-center text-sm text-violet-600 hover:underline">Continue Shopping</a>
+      </div>
+    </div>
+  }
+</div>

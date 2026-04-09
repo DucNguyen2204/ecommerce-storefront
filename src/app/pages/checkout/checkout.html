@@ -1,0 +1,49 @@
+<div class="container mx-auto px-4 py-8 max-w-2xl">
+  <h1 class="text-2xl font-bold mb-8">Checkout</h1>
+
+  <div class="flex flex-col gap-6">
+    <p-card header="Order Summary">
+      @if (cartService$.cart(); as cart) {
+        @for (item of cart.items; track item.id) {
+          <div class="flex justify-between py-2 border-b last:border-0">
+            <span>{{ item.product.name }} &times; {{ item.quantity }}</span>
+            <span class="font-medium">\${{ item.subtotal | number:'1.2-2' }}</span>
+          </div>
+        }
+        <div class="flex justify-between pt-4 text-lg font-bold">
+          <span>Total</span>
+          <span>\${{ cart.totalAmount | number:'1.2-2' }}</span>
+        </div>
+      }
+    </p-card>
+
+    <p-card header="Shipping Address">
+      <div class="flex flex-col gap-4">
+        <textarea
+          pTextarea
+          [(ngModel)]="shippingAddress"
+          placeholder="Enter your full shipping address..."
+          rows="4"
+          class="w-full"
+        ></textarea>
+
+        @if (error()) {
+          <p-message severity="error" [text]="error()!" />
+        }
+
+        <div class="flex gap-3">
+          <a routerLink="/cart">
+            <p-button label="Back to Cart" severity="secondary" outlined />
+          </a>
+          <p-button
+            label="Place Order"
+            icon="pi pi-check"
+            [loading]="placing()"
+            [disabled]="!shippingAddress.trim()"
+            (onClick)="placeOrder()"
+          />
+        </div>
+      </div>
+    </p-card>
+  </div>
+</div>

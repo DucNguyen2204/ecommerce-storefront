@@ -1,0 +1,50 @@
+<section class="bg-gradient-to-r from-violet-600 to-indigo-600 text-white py-20 px-6 text-center">
+  <h1 class="text-4xl font-bold mb-4">Welcome to MyStore</h1>
+  <p class="text-lg mb-8 opacity-90">Discover quality products at great prices</p>
+  <a routerLink="/shop">
+    <p-button label="Shop Now" size="large" severity="contrast" />
+  </a>
+</section>
+
+<section class="container mx-auto px-4 py-12">
+  <h2 class="text-2xl font-bold mb-8">Featured Products</h2>
+
+  @if (loading()) {
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      @for (_ of [1,2,3,4,5,6,7,8]; track $index) {
+        <p-skeleton height="280px" />
+      }
+    </div>
+  } @else {
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      @for (product of featured(); track product.id) {
+        <div class="border rounded-lg p-4 flex flex-col gap-3 hover:shadow-md transition-shadow">
+          <div class="bg-gray-100 rounded h-40 flex items-center justify-center text-gray-400 text-sm">
+            No image
+          </div>
+          <a [routerLink]="['/shop', product.id]" class="font-semibold hover:text-violet-600 line-clamp-2">
+            {{ product.name }}
+          </a>
+          <span class="text-gray-500 text-sm">{{ product.category.name }}</span>
+          <div class="flex items-center justify-between mt-auto">
+            <span class="text-lg font-bold">\${{ product.price | number:'1.2-2' }}</span>
+            @if (auth.isAuthenticated()) {
+              <p-button
+                icon="pi pi-cart-plus"
+                size="small"
+                [loading]="addingToCart() === product.id"
+                (onClick)="addToCart(product)"
+              />
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="text-center mt-10">
+      <a routerLink="/shop">
+        <p-button label="View All Products" severity="secondary" outlined />
+      </a>
+    </div>
+  }
+</section>

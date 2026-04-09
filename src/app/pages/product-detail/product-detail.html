@@ -1,0 +1,64 @@
+<div class="container mx-auto px-4 py-8">
+  <a routerLink="/shop" class="text-violet-600 hover:underline text-sm mb-6 inline-block">
+    &larr; Back to Shop
+  </a>
+
+  @if (loading()) {
+    <div class="flex gap-10">
+      <p-skeleton width="400px" height="400px" />
+      <div class="flex-1 flex flex-col gap-4">
+        <p-skeleton height="40px" />
+        <p-skeleton height="24px" width="200px" />
+        <p-skeleton height="60px" />
+        <p-skeleton height="48px" width="160px" />
+      </div>
+    </div>
+  } @else if (product(); as p) {
+    <div class="flex flex-col md:flex-row gap-10">
+      <div class="bg-gray-100 rounded-lg w-full md:w-96 h-96 flex items-center justify-center text-gray-400">
+        No image
+      </div>
+
+      <div class="flex-1 flex flex-col gap-4">
+        <div>
+          <span class="text-sm text-violet-600 font-medium">{{ p.category.name }}</span>
+          <h1 class="text-3xl font-bold mt-1">{{ p.name }}</h1>
+        </div>
+
+        <span class="text-3xl font-bold text-gray-900">\${{ p.price | number:'1.2-2' }}</span>
+
+        @if (p.description) {
+          <p class="text-gray-600 leading-relaxed">{{ p.description }}</p>
+        }
+
+        <div class="text-sm text-gray-500">
+          SKU: {{ p.sku }} &nbsp;&bull;&nbsp;
+          @if (p.stockQuantity > 0) {
+            <span class="text-green-600">In stock ({{ p.stockQuantity }})</span>
+          } @else {
+            <span class="text-red-500">Out of stock</span>
+          }
+        </div>
+
+        @if (auth.isAuthenticated() && p.stockQuantity > 0) {
+          <div class="flex items-center gap-4 mt-2">
+            <p-inputnumber [(ngModel)]="quantity" [min]="1" [max]="p.stockQuantity" [showButtons]="true" />
+            <p-button
+              label="Add to Cart"
+              icon="pi pi-shopping-cart"
+              [loading]="adding()"
+              (onClick)="addToCart()"
+            />
+          </div>
+          @if (added()) {
+            <p-message severity="success" text="Added to cart!" />
+          }
+        } @else if (!auth.isAuthenticated()) {
+          <a routerLink="/auth/login">
+            <p-button label="Sign in to purchase" severity="secondary" outlined />
+          </a>
+        }
+      </div>
+    </div>
+  }
+</div>
