@@ -12,7 +12,7 @@
   } @else {
     <div class="flex flex-col lg:flex-row gap-8">
       <div class="flex-1">
-        <p-table [value]="cartService.cart()!.items" [tableStyle]="{'min-width': '40rem'}">
+        <p-table [value]="cartService.cart()!.items" [tableStyle]="{ 'min-width': '40rem' }">
           <ng-template #header>
             <tr>
               <th></th>
@@ -35,11 +35,14 @@
                 }
               </td>
               <td>
-                <a [routerLink]="['/shop', item.product.id]" class="font-medium hover:text-violet-600">
+                <a
+                  [routerLink]="['/shop', item.product.id]"
+                  class="font-medium hover:text-violet-600"
+                >
                   {{ item.product.name }}
                 </a>
               </td>
-              <td>\${{ item.unitPrice | number:'1.2-2' }}</td>
+              <td>${{ item.unitPrice | number: '1.2-2' }}</td>
               <td>
                 <p-inputnumber
                   [ngModel]="item.quantity"
@@ -49,9 +52,14 @@
                   inputStyleClass="w-16"
                 />
               </td>
-              <td class="font-semibold">\${{ item.subtotal | number:'1.2-2' }}</td>
+              <td class="font-semibold">${{ item.subtotal | number: '1.2-2' }}</td>
               <td>
-                <p-button icon="pi pi-trash" severity="danger" [text]="true" (onClick)="remove(item)" />
+                <p-button
+                  icon="pi pi-trash"
+                  severity="danger"
+                  [text]="true"
+                  (onClick)="remove(item)"
+                />
               </td>
             </tr>
           </ng-template>
@@ -62,10 +70,18 @@
         <h2 class="text-xl font-bold">Order Summary</h2>
         <div class="flex justify-between text-lg font-semibold border-t pt-4">
           <span>Total</span>
-          <span>\${{ cartService.cart()!.totalAmount | number:'1.2-2' }}</span>
+          <span>${{ cartService.cart()!.totalAmount | number: '1.2-2' }}</span>
         </div>
-        <p-button label="Proceed to Checkout" icon="pi pi-arrow-right" iconPos="right" (onClick)="checkout()" styleClass="w-full" />
-        <a routerLink="/shop" class="text-center text-sm text-violet-600 hover:underline">Continue Shopping</a>
+        <p-button
+          label="Proceed to Checkout"
+          icon="pi pi-arrow-right"
+          iconPos="right"
+          (onClick)="checkout()"
+          styleClass="w-full"
+        />
+        <a routerLink="/shop" class="text-center text-sm text-violet-600 hover:underline"
+          >Continue Shopping</a
+        >
       </div>
     </div>
   }

@@ -182,23 +182,8 @@ export const MOCK_AUTH_PAYLOAD: AuthPayload = {
 
 export const MOCK_INITIAL_CART: Cart = {
   id: 'cart-1',
-  items: [
-    {
-      id: 'ci-1',
-      product: MOCK_PRODUCTS[0],
-      quantity: 1,
-      unitPrice: MOCK_PRODUCTS[0].price,
-      subtotal: MOCK_PRODUCTS[0].price,
-    },
-    {
-      id: 'ci-2',
-      product: MOCK_PRODUCTS[7],
-      quantity: 2,
-      unitPrice: MOCK_PRODUCTS[7].price,
-      subtotal: MOCK_PRODUCTS[7].price * 2,
-    },
-  ],
-  totalAmount: MOCK_PRODUCTS[0].price + MOCK_PRODUCTS[7].price * 2,
+  items: [],
+  totalAmount: 0,
 };
 
 export const MOCK_ORDERS: Order[] = [
