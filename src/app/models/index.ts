@@ -28,6 +28,7 @@ export interface Product {
   price: number;
   stockQuantity: number;
   sku: string;
+  imageUrl?: string;
   category: Category;
   active: boolean;
   createdAt: string;

@@ -33,15 +33,28 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       @for (product of page()!.content; track product.id) {
         <div class="border rounded-lg p-4 flex flex-col gap-3 hover:shadow-md transition-shadow">
-          <div class="bg-gray-100 rounded h-40 flex items-center justify-center text-gray-400 text-sm">
-            No image
-          </div>
-          <a [routerLink]="['/shop', product.id]" class="font-semibold hover:text-violet-600 line-clamp-2">
+          @if (product.imageUrl) {
+            <img
+              [src]="product.imageUrl"
+              [alt]="product.name"
+              class="w-full h-40 object-cover rounded"
+            />
+          } @else {
+            <div
+              class="bg-gray-100 rounded h-40 flex items-center justify-center text-gray-400 text-sm"
+            >
+              No image
+            </div>
+          }
+          <a
+            [routerLink]="['/shop', product.id]"
+            class="font-semibold hover:text-violet-600 line-clamp-2"
+          >
             {{ product.name }}
           </a>
           <span class="text-gray-500 text-sm">{{ product.category.name }}</span>
           <div class="flex items-center justify-between mt-auto">
-            <span class="text-lg font-bold">\${{ product.price | number:'1.2-2' }}</span>
+            <span class="text-lg font-bold">${{ product.price | number: '1.2-2' }}</span>
             <p-button
               icon="pi pi-cart-plus"
               size="small"

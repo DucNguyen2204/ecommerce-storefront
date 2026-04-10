@@ -15,6 +15,7 @@
         <p-table [value]="cartService.cart()!.items" [tableStyle]="{'min-width': '40rem'}">
           <ng-template #header>
             <tr>
+              <th></th>
               <th>Product</th>
               <th>Price</th>
               <th>Quantity</th>
@@ -24,6 +25,15 @@
           </ng-template>
           <ng-template #body let-item>
             <tr>
+              <td class="w-16">
+                @if (item.product.imageUrl) {
+                  <img
+                    [src]="item.product.imageUrl"
+                    [alt]="item.product.name"
+                    class="w-14 h-14 object-cover rounded"
+                  />
+                }
+              </td>
               <td>
                 <a [routerLink]="['/shop', item.product.id]" class="font-medium hover:text-violet-600">
                   {{ item.product.name }}
