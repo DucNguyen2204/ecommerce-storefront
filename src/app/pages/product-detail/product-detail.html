@@ -1,72 +1,91 @@
-<div class="container mx-auto px-4 py-8">
-  <a routerLink="/shop" class="text-violet-600 hover:underline text-sm mb-6 inline-block">
-    &larr; Back to Shop
+<div class="container mx-auto px-4 py-8 max-w-5xl">
+
+  <a routerLink="/shop" class="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-violet-600 transition-colors mb-8">
+    <i class="pi pi-arrow-left text-xs"></i> Back to Shop
   </a>
 
   @if (loading()) {
-    <div class="flex gap-10">
-      <p-skeleton width="400px" height="400px" />
+    <div class="flex flex-col md:flex-row gap-10">
+      <p-skeleton width="420px" height="420px" styleClass="rounded-2xl shrink-0" />
       <div class="flex-1 flex flex-col gap-4">
-        <p-skeleton height="40px" />
-        <p-skeleton height="24px" width="200px" />
-        <p-skeleton height="60px" />
-        <p-skeleton height="48px" width="160px" />
+        <p-skeleton height="16px" width="120px" />
+        <p-skeleton height="44px" />
+        <p-skeleton height="40px" width="140px" />
+        <p-skeleton height="80px" />
+        <p-skeleton height="48px" width="200px" />
       </div>
     </div>
   } @else if (product(); as p) {
     <div class="flex flex-col md:flex-row gap-10">
-      @if (p.imageUrl) {
-        <img
-          [src]="p.imageUrl"
-          [alt]="p.name"
-          class="w-full md:w-96 h-96 object-cover rounded-lg"
-        />
-      } @else {
-        <div class="bg-gray-100 rounded-lg w-full md:w-96 h-96 flex items-center justify-center text-gray-400">
-          No image
-        </div>
-      }
 
-      <div class="flex-1 flex flex-col gap-4">
+      <div class="w-full md:w-[420px] shrink-0">
+        @if (p.imageUrl) {
+          <img
+            [src]="p.imageUrl"
+            [alt]="p.name"
+            class="w-full h-[420px] object-cover rounded-2xl shadow-lg shadow-gray-200"
+          />
+        } @else {
+          <div class="w-full h-[420px] bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center">
+            <i class="pi pi-image text-5xl text-gray-300"></i>
+          </div>
+        }
+      </div>
+
+      <div class="flex-1 flex flex-col gap-5">
         <div>
-          <span class="text-sm text-violet-600 font-medium">{{ p.category.name }}</span>
-          <h1 class="text-3xl font-bold mt-1">{{ p.name }}</h1>
+          <span class="inline-block text-xs font-medium text-violet-600 bg-violet-50 px-3 py-1 rounded-full mb-3">
+            {{ p.category.name }}
+          </span>
+          <h1 class="text-3xl font-bold text-gray-900 leading-tight">{{ p.name }}</h1>
         </div>
 
-        <span class="text-3xl font-bold text-gray-900">\${{ p.price | number:'1.2-2' }}</span>
+        <span class="text-4xl font-bold text-violet-600">${{ p.price | number:'1.2-2' }}</span>
 
         @if (p.description) {
           <p class="text-gray-600 leading-relaxed">{{ p.description }}</p>
         }
 
-        <div class="text-sm text-gray-500">
-          SKU: {{ p.sku }} &nbsp;&bull;&nbsp;
+        <div class="flex items-center gap-3 text-sm text-gray-500 py-3 border-t border-b border-gray-100">
+          <span>SKU: <span class="text-gray-700 font-medium">{{ p.sku }}</span></span>
+          <span class="text-gray-300">|</span>
           @if (p.stockQuantity > 0) {
-            <span class="text-green-600">In stock ({{ p.stockQuantity }})</span>
+            <span class="inline-flex items-center gap-1.5 text-green-700 bg-green-50 border border-green-100 px-2.5 py-1 rounded-full font-medium">
+              <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+              In stock ({{ p.stockQuantity }})
+            </span>
           } @else {
-            <span class="text-red-500">Out of stock</span>
+            <span class="inline-flex items-center gap-1.5 text-red-600 bg-red-50 border border-red-100 px-2.5 py-1 rounded-full font-medium">
+              <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+              Out of stock
+            </span>
           }
         </div>
 
         @if (auth.isAuthenticated() && p.stockQuantity > 0) {
-          <div class="flex items-center gap-4 mt-2">
-            <p-inputnumber [(ngModel)]="quantity" [min]="1" [max]="p.stockQuantity" [showButtons]="true" />
+          <div class="flex items-center gap-4">
+            <p-inputnumber [(ngModel)]="quantity" [min]="1" [max]="p.stockQuantity" [showButtons]="true" inputStyleClass="w-16 text-center" />
             <p-button
               label="Add to Cart"
               icon="pi pi-shopping-cart"
               [loading]="adding()"
               (onClick)="addToCart()"
+              styleClass="px-6"
             />
           </div>
           @if (added()) {
             <p-message severity="success" text="Added to cart!" />
           }
         } @else if (!auth.isAuthenticated()) {
-          <a routerLink="/auth/login">
-            <p-button label="Sign in to purchase" severity="secondary" outlined />
-          </a>
+          <div class="bg-violet-50 border border-violet-100 rounded-xl p-4">
+            <p class="text-sm text-violet-700 mb-3">Sign in to add this item to your cart</p>
+            <a routerLink="/auth/login">
+              <p-button label="Sign in to purchase" severity="secondary" outlined />
+            </a>
+          </div>
         }
       </div>
+
     </div>
   }
 </div>

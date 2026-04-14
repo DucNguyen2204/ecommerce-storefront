@@ -1,49 +1,69 @@
-<div class="container mx-auto px-4 py-8 max-w-2xl">
-  <h1 class="text-2xl font-bold mb-8">Checkout</h1>
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-violet-50/30 py-10 px-4">
+  <div class="container mx-auto max-w-2xl">
 
-  <div class="flex flex-col gap-6">
-    <p-card header="Order Summary">
-      @if (cartService$.cart(); as cart) {
-        @for (item of cart.items; track item.id) {
-          <div class="flex justify-between py-2 border-b last:border-0">
-            <span>{{ item.product.name }} &times; {{ item.quantity }}</span>
-            <span class="font-medium">\${{ item.subtotal | number:'1.2-2' }}</span>
-          </div>
-        }
-        <div class="flex justify-between pt-4 text-lg font-bold">
-          <span>Total</span>
-          <span>\${{ cart.totalAmount | number:'1.2-2' }}</span>
+    <div class="mb-8">
+      <a routerLink="/cart" class="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-violet-600 transition-colors mb-4">
+        <i class="pi pi-arrow-left text-xs"></i> Back to Cart
+      </a>
+      <h1 class="text-3xl font-bold text-gray-900">Checkout</h1>
+      <p class="text-sm text-gray-500 mt-1">Review your order and confirm shipping details</p>
+    </div>
+
+    <div class="flex flex-col gap-5">
+
+      <div class="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
+        <div class="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
+          <i class="pi pi-list text-violet-500"></i>
+          <h2 class="font-bold text-gray-900">Order Summary</h2>
         </div>
-      }
-    </p-card>
+        <div class="px-5 py-4">
+          @if (cartService$.cart(); as cart) {
+            <div class="flex flex-col divide-y divide-gray-50">
+              @for (item of cart.items; track item.id) {
+                <div class="flex justify-between py-2.5">
+                  <span class="text-gray-700">{{ item.product.name }} <span class="text-gray-400">&times; {{ item.quantity }}</span></span>
+                  <span class="font-medium text-gray-900">${{ item.subtotal | number:'1.2-2' }}</span>
+                </div>
+              }
+            </div>
+            <div class="flex justify-between pt-4 mt-2 border-t border-gray-100 text-lg font-bold">
+              <span class="text-gray-900">Total</span>
+              <span class="text-violet-600">${{ cart.totalAmount | number:'1.2-2' }}</span>
+            </div>
+          }
+        </div>
+      </div>
 
-    <p-card header="Shipping Address">
-      <div class="flex flex-col gap-4">
-        <textarea
-          pTextarea
-          [(ngModel)]="shippingAddress"
-          placeholder="Enter your full shipping address..."
-          rows="4"
-          class="w-full"
-        ></textarea>
+      <div class="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
+        <div class="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
+          <i class="pi pi-map-marker text-violet-500"></i>
+          <h2 class="font-bold text-gray-900">Shipping Address</h2>
+        </div>
+        <div class="px-5 py-5 flex flex-col gap-4">
+          <textarea
+            pTextarea
+            [(ngModel)]="shippingAddress"
+            placeholder="Enter your full shipping address including street, city, state, and ZIP code..."
+            rows="4"
+            class="w-full"
+          ></textarea>
 
-        @if (error()) {
-          <p-message severity="error" [text]="error()!" />
-        }
+          @if (error()) {
+            <p-message severity="error" [text]="error()!" />
+          }
 
-        <div class="flex gap-3">
-          <a routerLink="/cart">
-            <p-button label="Back to Cart" severity="secondary" outlined />
-          </a>
           <p-button
             label="Place Order"
             icon="pi pi-check"
+            iconPos="right"
             [loading]="placing()"
             [disabled]="!shippingAddress.trim()"
             (onClick)="placeOrder()"
+            styleClass="w-full"
           />
         </div>
       </div>
-    </p-card>
+
+    </div>
   </div>
 </div>

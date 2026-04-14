@@ -1,6 +1,6 @@
 import { Component, computed, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
 import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
@@ -12,7 +12,7 @@ import { ProductService } from '../../services/product.service';
 
 @Component({
   selector: 'app-header',
-  imports: [MenubarModule, ButtonModule, BadgeModule, RouterLink],
+  imports: [MenubarModule, ButtonModule, BadgeModule, RouterLink, RouterLinkActive],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })

@@ -1,32 +1,54 @@
-<p-menubar [model]="navItems()" styleClass="rounded-none border-x-0 border-t-0 px-6 w-full">
-  <ng-template #start>
-    <a routerLink="/" class="font-bold text-xl">MyStore</a>
-  </ng-template>
+<div class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
+  <div class="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
 
-  <ng-template #end>
-    <div class="flex items-center gap-2 pr-2">
+    <a routerLink="/" class="flex items-center gap-2 text-violet-600 font-bold text-xl shrink-0">
+      <i class="pi pi-shopping-bag text-2xl"></i>
+      <span>MyStore</span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-1">
+      <a routerLink="/" routerLinkActive="bg-violet-50 text-violet-600 font-semibold" [routerLinkActiveOptions]="{exact:true}"
+         class="px-4 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+        Home
+      </a>
+      <a routerLink="/shop" routerLinkActive="bg-violet-50 text-violet-600 font-semibold"
+         class="px-4 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+        Shop
+      </a>
+    </nav>
+
+    <div class="flex items-center gap-2 ml-auto">
       @if (auth.isAuthenticated()) {
-        <a routerLink="/cart">
-          <p-button icon="pi pi-shopping-cart" [rounded]="true" [text]="true"
-            [badge]="cartCount() > 0 ? cartCount().toString() : ''"
-            badgeSeverity="danger"
-          />
+        <a routerLink="/cart" class="relative inline-flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors text-gray-600">
+          <i class="pi pi-shopping-cart text-lg"></i>
+          @if (cartCount() > 0) {
+            <span class="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-xs font-bold w-4.5 h-4.5 rounded-full flex items-center justify-center leading-none px-1">
+              {{ cartCount() }}
+            </span>
+          }
         </a>
-        <a routerLink="/orders">
-          <p-button icon="pi pi-box" [rounded]="true" [text]="true" />
+        <a routerLink="/orders" class="inline-flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors text-gray-600">
+          <i class="pi pi-box text-lg"></i>
         </a>
-        <span class="text-sm text-gray-600 hidden md:inline">
+        <span class="hidden md:flex items-center gap-1.5 text-sm font-medium text-gray-700 px-2">
+          <i class="pi pi-user text-gray-400 text-xs"></i>
           {{ auth.currentUser()?.firstName }}
         </span>
-        <p-button label="Sign Out" severity="secondary" size="small" (onClick)="logout()" />
+        <button (click)="logout()"
+          class="px-3 py-1.5 rounded-lg text-sm text-gray-600 border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all cursor-pointer">
+          Sign Out
+        </button>
       } @else {
-        <a routerLink="/auth/login">
-          <p-button label="Sign In" severity="contrast" size="small" />
+        <a routerLink="/auth/login"
+          class="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 border border-gray-200 hover:bg-gray-50 transition-all">
+          Sign In
         </a>
-        <a routerLink="/auth/register">
-          <p-button label="Register" size="small" />
+        <a routerLink="/auth/register"
+          class="px-4 py-2 rounded-lg text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 transition-colors shadow-sm shadow-violet-200">
+          Register
         </a>
       }
     </div>
-  </ng-template>
-</p-menubar>
+
+  </div>
+</div>

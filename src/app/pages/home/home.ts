@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { SkeletonModule } from 'primeng/skeleton';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { Product } from '../../models';
 import { CartService } from '../../services/cart.service';
@@ -12,7 +13,7 @@ import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, DecimalPipe, ButtonModule, CardModule, SkeletonModule],
+  imports: [RouterLink, DecimalPipe, ButtonModule, CardModule, SkeletonModule, TooltipModule],
   templateUrl: './home.html',
 })
 export class Home implements OnInit {

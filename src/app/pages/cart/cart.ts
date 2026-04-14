@@ -5,6 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TableModule } from 'primeng/table';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { TooltipModule } from 'primeng/tooltip';
 import { FormsModule } from '@angular/forms';
 
 import { CartItem } from '../../models';
@@ -12,7 +13,7 @@ import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-cart',
-  imports: [RouterLink, FormsModule, DecimalPipe, ButtonModule, SkeletonModule, TableModule, InputNumberModule],
+  imports: [RouterLink, FormsModule, DecimalPipe, ButtonModule, SkeletonModule, TableModule, InputNumberModule, TooltipModule],
   templateUrl: './cart.html',
 })
 export class CartPage implements OnInit {

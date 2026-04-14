@@ -1,88 +1,121 @@
-<div class="container mx-auto px-4 py-8">
-  <h1 class="text-2xl font-bold mb-8">Your Cart</h1>
+<div class="container mx-auto px-4 py-10">
+
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Your Cart</h1>
+  </div>
 
   @if (loading()) {
-    <p-skeleton height="200px" />
+    <p-skeleton height="200px" styleClass="rounded-xl" />
   } @else if (!cartService.cart() || cartService.cart()!.items.length === 0) {
-    <div class="text-center py-20 text-gray-500">
-      <i class="pi pi-shopping-cart text-5xl mb-4 block"></i>
-      <p class="text-lg mb-6">Your cart is empty.</p>
-      <a routerLink="/shop"><p-button label="Continue Shopping" severity="secondary" outlined /></a>
+    <div class="flex flex-col items-center justify-center py-28 text-center">
+      <div class="w-24 h-24 bg-violet-50 rounded-full flex items-center justify-center mb-6">
+        <i class="pi pi-shopping-cart text-4xl text-violet-300"></i>
+      </div>
+      <h3 class="text-xl font-semibold text-gray-700 mb-2">Your cart is empty</h3>
+      <p class="text-gray-500 text-sm mb-8">Looks like you haven't added anything yet.</p>
+      <a routerLink="/shop">
+        <p-button label="Continue Shopping" icon="pi pi-arrow-right" iconPos="right" />
+      </a>
     </div>
   } @else {
-    <div class="flex flex-col lg:flex-row gap-8">
-      <div class="flex-1">
-        <p-table [value]="cartService.cart()!.items" [tableStyle]="{ 'min-width': '40rem' }">
-          <ng-template #header>
-            <tr>
-              <th></th>
-              <th>Product</th>
-              <th>Price</th>
-              <th>Quantity</th>
-              <th>Subtotal</th>
-              <th></th>
-            </tr>
-          </ng-template>
-          <ng-template #body let-item>
-            <tr>
-              <td class="w-16">
-                @if (item.product.imageUrl) {
-                  <img
-                    [src]="item.product.imageUrl"
-                    [alt]="item.product.name"
-                    class="w-14 h-14 object-cover rounded"
+    <div class="flex flex-col lg:flex-row gap-8 items-start">
+
+      <div class="flex-1 min-w-0">
+        <div class="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
+          <p-table [value]="cartService.cart()!.items" [tableStyle]="{ 'min-width': '40rem' }">
+            <ng-template #header>
+              <tr class="bg-gray-50">
+                <th class="text-xs font-semibold text-gray-500 uppercase tracking-wide" colspan="2">Product</th>
+                <th class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Price</th>
+                <th class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Qty</th>
+                <th class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Subtotal</th>
+                <th></th>
+              </tr>
+            </ng-template>
+            <ng-template #body let-item>
+              <tr class="border-t border-gray-50 hover:bg-gray-50/50 transition-colors">
+                <td class="w-16 py-4">
+                  @if (item.product.imageUrl) {
+                    <img
+                      [src]="item.product.imageUrl"
+                      [alt]="item.product.name"
+                      class="w-14 h-14 object-cover rounded-lg"
+                    />
+                  } @else {
+                    <div class="w-14 h-14 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <i class="pi pi-image text-gray-300"></i>
+                    </div>
+                  }
+                </td>
+                <td class="py-4">
+                  <a [routerLink]="['/shop', item.product.id]" class="font-medium text-gray-900 hover:text-violet-600 transition-colors">
+                    {{ item.product.name }}
+                  </a>
+                </td>
+                <td class="py-4 text-gray-600">${{ item.unitPrice | number: '1.2-2' }}</td>
+                <td class="py-4">
+                  <p-inputnumber
+                    [ngModel]="item.quantity"
+                    (ngModelChange)="updateQuantity(item, $event)"
+                    [min]="1"
+                    [showButtons]="true"
+                    inputStyleClass="w-14 text-center"
                   />
-                }
-              </td>
-              <td>
-                <a
-                  [routerLink]="['/shop', item.product.id]"
-                  class="font-medium hover:text-violet-600"
-                >
-                  {{ item.product.name }}
-                </a>
-              </td>
-              <td>${{ item.unitPrice | number: '1.2-2' }}</td>
-              <td>
-                <p-inputnumber
-                  [ngModel]="item.quantity"
-                  (ngModelChange)="updateQuantity(item, $event)"
-                  [min]="1"
-                  [showButtons]="true"
-                  inputStyleClass="w-16"
-                />
-              </td>
-              <td class="font-semibold">${{ item.subtotal | number: '1.2-2' }}</td>
-              <td>
-                <p-button
-                  icon="pi pi-trash"
-                  severity="danger"
-                  [text]="true"
-                  (onClick)="remove(item)"
-                />
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
+                </td>
+                <td class="py-4 font-semibold text-gray-900">${{ item.subtotal | number: '1.2-2' }}</td>
+                <td class="py-4">
+                  <p-button
+                    icon="pi pi-trash"
+                    severity="danger"
+                    [text]="true"
+                    [rounded]="true"
+                    (onClick)="remove(item)"
+                    pTooltip="Remove"
+                    tooltipPosition="top"
+                  />
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+
+        <div class="mt-4">
+          <a routerLink="/shop" class="inline-flex items-center gap-1.5 text-sm text-violet-600 hover:text-violet-700 transition-colors">
+            <i class="pi pi-arrow-left text-xs"></i> Continue Shopping
+          </a>
+        </div>
       </div>
 
-      <div class="w-full lg:w-72 border rounded-lg p-6 h-fit flex flex-col gap-4">
-        <h2 class="text-xl font-bold">Order Summary</h2>
-        <div class="flex justify-between text-lg font-semibold border-t pt-4">
-          <span>Total</span>
-          <span>${{ cartService.cart()!.totalAmount | number: '1.2-2' }}</span>
+      <div class="w-full lg:w-80 shrink-0">
+        <div class="bg-white border border-gray-100 rounded-xl shadow-sm p-6 flex flex-col gap-4 lg:sticky lg:top-24">
+          <h2 class="text-lg font-bold text-gray-900 pb-3 border-b border-gray-100">Order Summary</h2>
+
+          <div class="flex flex-col gap-2 text-sm text-gray-600">
+            <div class="flex justify-between">
+              <span>Subtotal</span>
+              <span>${{ cartService.cart()!.totalAmount | number: '1.2-2' }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Shipping</span>
+              <span class="text-green-600 font-medium">Free</span>
+            </div>
+          </div>
+
+          <div class="flex justify-between text-lg font-bold text-gray-900 border-t border-gray-100 pt-3">
+            <span>Total</span>
+            <span class="text-violet-600">${{ cartService.cart()!.totalAmount | number: '1.2-2' }}</span>
+          </div>
+
+          <p-button
+            label="Proceed to Checkout"
+            icon="pi pi-arrow-right"
+            iconPos="right"
+            (onClick)="checkout()"
+            styleClass="w-full"
+          />
         </div>
-        <p-button
-          label="Proceed to Checkout"
-          icon="pi pi-arrow-right"
-          iconPos="right"
-          (onClick)="checkout()"
-          styleClass="w-full"
-        />
-        <a routerLink="/shop" class="text-center text-sm text-violet-600 hover:underline"
-          >Continue Shopping</a
-        >
       </div>
+
     </div>
   }
 </div>

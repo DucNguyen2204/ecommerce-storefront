@@ -1,7 +1,11 @@
-<div class="container mx-auto px-4 py-8">
-  <h1 class="text-2xl font-bold mb-6">Shop</h1>
+<div class="container mx-auto px-4 py-10">
 
-  <div class="flex flex-col md:flex-row gap-4 mb-8">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Shop</h1>
+    <p class="text-gray-500 mt-1 text-sm">Browse our full collection</p>
+  </div>
+
+  <div class="flex flex-col sm:flex-row gap-3 mb-8 bg-gray-50 p-3 rounded-xl border border-gray-100">
     <p-select
       [options]="categories()"
       [(ngModel)]="selectedCategory"
@@ -9,58 +13,71 @@
       placeholder="All Categories"
       [showClear]="true"
       (onChange)="onCategoryChange()"
-      class="w-full md:w-56"
+      class="w-full sm:w-56"
     />
-    <input
-      pInputText
-      [(ngModel)]="search"
-      placeholder="Search products..."
-      (keyup.enter)="onSearch()"
-      class="flex-1"
-    />
-    <p-button label="Search" icon="pi pi-search" (onClick)="onSearch()" />
+    <div class="flex flex-1 gap-2">
+      <input
+        pInputText
+        [(ngModel)]="search"
+        placeholder="Search products..."
+        (keyup.enter)="onSearch()"
+        class="flex-1"
+      />
+      <p-button icon="pi pi-search" (onClick)="onSearch()" [rounded]="false" />
+    </div>
   </div>
 
   @if (loading()) {
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       @for (_ of skeletons; track $index) {
-        <p-skeleton height="280px" />
+        <p-skeleton height="320px" styleClass="rounded-xl" />
       }
     </div>
   } @else if (page()?.content?.length === 0) {
-    <p class="text-center text-gray-500 py-20">No products found.</p>
+    <div class="flex flex-col items-center justify-center py-28 text-center">
+      <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-5">
+        <i class="pi pi-search text-3xl text-gray-400"></i>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-700 mb-1">No products found</h3>
+      <p class="text-gray-500 text-sm mb-6">Try a different search term or category</p>
+      <p-button label="Clear filters" severity="secondary" outlined (onClick)="selectedCategory = null; search = ''; onSearch()" />
+    </div>
   } @else {
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       @for (product of page()!.content; track product.id) {
-        <div class="border rounded-lg p-4 flex flex-col gap-3 hover:shadow-md transition-shadow">
-          @if (product.imageUrl) {
-            <img
-              [src]="product.imageUrl"
-              [alt]="product.name"
-              class="w-full h-40 object-cover rounded"
-            />
-          } @else {
-            <div
-              class="bg-gray-100 rounded h-40 flex items-center justify-center text-gray-400 text-sm"
-            >
-              No image
-            </div>
-          }
-          <a
-            [routerLink]="['/shop', product.id]"
-            class="font-semibold hover:text-violet-600 line-clamp-2"
-          >
-            {{ product.name }}
+        <div class="group bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+          <a [routerLink]="['/shop', product.id]" class="block relative">
+            @if (product.imageUrl) {
+              <img
+                [src]="product.imageUrl"
+                [alt]="product.name"
+                class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            } @else {
+              <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                <i class="pi pi-image text-3xl text-gray-300"></i>
+              </div>
+            }
           </a>
-          <span class="text-gray-500 text-sm">{{ product.category.name }}</span>
-          <div class="flex items-center justify-between mt-auto">
-            <span class="text-lg font-bold">${{ product.price | number: '1.2-2' }}</span>
-            <p-button
-              icon="pi pi-cart-plus"
-              size="small"
-              [loading]="addingToCart() === product.id"
-              (onClick)="addToCart(product)"
-            />
+          <div class="p-4 flex flex-col gap-2 flex-1">
+            <span class="inline-block text-xs font-medium text-violet-600 bg-violet-50 px-2 py-0.5 rounded-full w-fit">
+              {{ product.category.name }}
+            </span>
+            <a [routerLink]="['/shop', product.id]" class="font-semibold text-gray-900 hover:text-violet-600 line-clamp-2 leading-snug transition-colors">
+              {{ product.name }}
+            </a>
+            <div class="flex items-center justify-between mt-auto pt-2">
+              <span class="text-xl font-bold text-gray-900">${{ product.price | number: '1.2-2' }}</span>
+              <p-button
+                icon="pi pi-cart-plus"
+                size="small"
+                [rounded]="true"
+                [loading]="addingToCart() === product.id"
+                (onClick)="addToCart(product)"
+                pTooltip="Add to cart"
+                tooltipPosition="top"
+              />
+            </div>
           </div>
         </div>
       }
@@ -71,7 +88,7 @@
       [totalRecords]="page()!.totalElements"
       [first]="currentPage * pageSize"
       (onPageChange)="onPageChange($event)"
-      class="mt-8"
+      class="mt-10"
     />
   }
 </div>

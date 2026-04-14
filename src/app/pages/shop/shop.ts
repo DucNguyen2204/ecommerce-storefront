@@ -9,6 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { SelectModule } from 'primeng/select';
 import { SkeletonModule } from 'primeng/skeleton';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { Category, Product, ProductPage } from '../../models';
 import { CartService } from '../../services/cart.service';
@@ -25,6 +26,7 @@ import { ProductService } from '../../services/product.service';
     PaginatorModule,
     SelectModule,
     SkeletonModule,
+    TooltipModule,
     DecimalPipe,
   ],
   templateUrl: './shop.html',
